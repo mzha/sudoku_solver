@@ -111,7 +111,7 @@ def sync_area(board, area, areanum):
     return board
 
 #-------------------------------------------------
-##Solving Functions
+##Solve rows/cols/areas
 def find_missing(section):
     nums = range(1,10)
     missing = []
@@ -156,6 +156,22 @@ def solved(board):
     return complete
 
 #-------------------------------------------------
+##Solve Puzzle
+def guess(board):
+    guess = []
+    tempboard = []
+    #Find guess
+    for i in range(len(board)):
+        for j in range (len(board[0])):
+            if type(board[i][j]) is list:
+                guess = board[i][j]
+
+    #Use guess to get new board
+                for num in guess:
+                    #print "Guessing", num, "at position", [[i],[j]]
+                    tempboard = board
+                    tempboard[i][j] = num
+                    solve(tempboard)
 
 def iter(board):
     #Solve Rows
@@ -169,20 +185,21 @@ def iter(board):
         sync_area(board, add_notes(get_area(board,area)), area)
     return board
 
-
 def solve(board):
     out = board
-    for i in range(10):
+    for i in range(50):
         out = iter(board)
     if solved(out):
         print "Puzzle Solved"
+        print "##################"
+        printboard(out)
+        print "##################"
         print "\n"
+        exit()
     else:
-        print "Not quite yet"
-    printboard(out)
+        #print "Not quite yet"
+        guess(board)
 
 #-------------------------------------------------
-
-print "#######################"
-solve(a)
-print "#######################"
+##Run Code
+solve(c)
