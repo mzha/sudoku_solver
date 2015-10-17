@@ -12,12 +12,13 @@ board = [
 ]
 
 # Board will init like this
-# s1 s2 s3
-# s4 s5 s6
-# s7 s8 s9
+# Areas:
+# 1 2 3
+# 4 5 6
+# 7 8 9
 
 #-------------------------------------------------
-
+##Board Functions
 def get_area(board, area):
     a = dict([
     (1 , board[0][0:3] + board[1][0:3] + board[2][0:3]),
@@ -50,7 +51,7 @@ def printboard(board):
         print "\n"
 
 #-------------------------------------------------
-
+##Sync solved areas to board
 def sync_row(board, row, rownum):
     board[rownum] = row
     return board
@@ -86,7 +87,7 @@ def sync_area(board, area, areanum):
     return board
 
 #-------------------------------------------------
-
+##Solving Functions
 def find_missing(section):
     nums = range(1,10)
     missing = []
@@ -113,12 +114,35 @@ def add_notes(section):
                 section[i] = both
     return section
 
-def solved(section):
+#-------------------------------------------------
+##Determine if the puzzle has been solved
+def sectionsolved(section):
     solved = True
     for element in section:
         if element == 0 or type(element) is list:
             solved = False
     return solved
+
+def solved(board):
+    complete = True
+    for row in board:
+        complete = complete and sectionsolved(row)
+    return complete
+
+#-------------------------------------------------
+
+def iter(board):
+    #Solve Rows
+    for row in range(len(board)):
+        sync_row(board, add_notes(get_row(board,row)), row)
+    #Solve Cols
+    for col in range(len(board[0])):
+        sync_col(board, add_notes(get_col(board,col)), col)
+    #Solve Areas
+    for area in range(1,10):
+        sync_area(board, add_notes(get_area(board,area)), area)
+    return board
+
 
 def solve(puzzle):
     board = puzzle
@@ -132,6 +156,7 @@ printboard(board)
 print "#######################"
 print add_notes(get_area(board,5))
 print "#######################"
-printboard(sync_area(board,add_notes(get_area(board,5)),5))
+printboard(iter(board))
+#printboard(sync_area(board,add_notes(get_area(board,5)),5))
 #printboard(sync_row(board, add_notes(get_row(board,6)), 6))
 #print sync_col(board, add_notes(get_col(board,6)), 6)[0]
