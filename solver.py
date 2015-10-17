@@ -1,3 +1,4 @@
+import pdb;
 board = [
 [0,2,9,4,8,6,0,1,3],
 [1,3,0,7,9,0,4,6,0],
@@ -15,19 +16,21 @@ board = [
 # s4 s5 s6
 # s7 s8 s9
 
-def get_section(board, section):
+#-------------------------------------------------
+
+def get_area(board, section):
     a = dict([
-    ('s1' , board[0][0:3] + board[1][0:3] + board[2][0:3]),
-    ('s4' , board[3][0:3] + board[4][0:3] + board[5][0:3]),
-    ('s7' , board[6][0:3] + board[7][0:3] + board[8][0:3]),
+    (1 , board[0][0:3] + board[1][0:3] + board[2][0:3]),
+    (4 , board[3][0:3] + board[4][0:3] + board[5][0:3]),
+    (7 , board[6][0:3] + board[7][0:3] + board[8][0:3]),
 
-    ('s2' , board[0][3:6] + board[1][3:6] + board[2][3:6]),
-    ('s5' , board[3][3:6] + board[4][3:6] + board[5][3:6]),
-    ('s8' , board[6][3:6] + board[7][3:6] + board[8][3:6]),
+    (2 , board[0][3:6] + board[1][3:6] + board[2][3:6]),
+    (5 , board[3][3:6] + board[4][3:6] + board[5][3:6]),
+    (8 , board[6][3:6] + board[7][3:6] + board[8][3:6]),
 
-    ('s3' , board[0][6:] + board[1][6:] + board[2][6:]),
-    ('s6' , board[3][6:] + board[4][6:] + board[5][6:]),
-    ('s9' , board[6][6:] + board[7][6:] + board[8][6:])
+    (3 , board[0][6:] + board[1][6:] + board[2][6:]),
+    (6 , board[3][6:] + board[4][6:] + board[5][6:]),
+    (9 , board[6][6:] + board[7][6:] + board[8][6:])
     ])
     return a[section]
 
@@ -42,24 +45,30 @@ def printboard(board):
     for i in range(len(board)):
         for j in range(len(board[0])):
                 print board[i][j],
-
         print "\n"
 
+#-------------------------------------------------
 
-def get_sectionums(section):
-    retarr = []
-    for i in range(3):
-        for j in range(3):
-            retarr.append(section[i][j])
-    return retarr
-
-def find_missingnos(section):
+def find_missing(section):
     nums = range(1,10)
     missing = []
     for num in nums:
         if num not in section:
             missing.append(num)
     return missing
+
+def add_notes(section):
+    missing = find_missing(section)
+    for i in range(len(section)):
+        if section[i] == 0:
+            section[i] = missing
+        elif type(section[i]) is list:
+            sboth = set(missing).intersection(section[i])
+            both = []
+            for j in range(len(sboth)):
+                both.append(sboth.pop())
+            section[i] = both
+    return section
 
 def solve_section(section):
     #Solves section if only one missing
@@ -78,5 +87,8 @@ def solved(section):
             solved = False
     return solved
 
+#-------------------------------------------------
 #printboard(board)
 #print s1
+#print add_notes(get_area(board,5))
+print add_notes(get_row(board,0))
