@@ -18,7 +18,7 @@ board = [
 
 #-------------------------------------------------
 
-def get_area(board, section):
+def get_area(board, area):
     a = dict([
     (1 , board[0][0:3] + board[1][0:3] + board[2][0:3]),
     (4 , board[3][0:3] + board[4][0:3] + board[5][0:3]),
@@ -32,20 +32,58 @@ def get_area(board, section):
     (6 , board[3][6:] + board[4][6:] + board[5][6:]),
     (9 , board[6][6:] + board[7][6:] + board[8][6:])
     ])
-    return a[section]
+    return a[area]
 
 def get_row(board, row):
     return board[row]
 
 def get_col(board, col):
-    #bad method, should be better one with for loop
-    return [board[0][col], board[1][col],board[2][col],board[3][col],board[4][col],board[5][col],board[6][col],board[7][col],board[8][col]]
+    ret = []
+    for i in range(len(board)):
+        ret.append(board[i][col])
+    return ret
 
 def printboard(board):
     for i in range(len(board)):
         for j in range(len(board[0])):
                 print board[i][j],
         print "\n"
+
+#-------------------------------------------------
+
+def sync_row(board, row, rownum):
+    board[rownum] = row
+    return board
+
+def sync_col(board, col, colnum):
+    for i in range(len(board)):
+        board[i][colnum] = col[i]
+    return board
+
+def sync_area(board, area, areanum):
+    if areanum == 1:
+        (board[0][0:3],board[1][0:3],board[2][0:3]) = area[0:3],area[3:6],area[6:9]
+    elif areanum == 4:
+        (board[3][0:3],board[4][0:3],board[5][0:3]) = area[0:3],area[3:6],area[6:9]
+    elif areanum == 7:
+        (board[6][0:3],board[7][0:3],board[8][0:3]) = area[0:3],area[3:6],area[6:9]
+
+    elif areanum == 2:
+        (board[0][3:6],board[1][3:6],board[2][3:6]) = area[0:3],area[3:6],area[6:9]
+    elif areanum == 5:
+        (board[3][3:6],board[4][3:6],board[5][3:6]) = area[0:3],area[3:6],area[6:9]
+    elif areanum == 8:
+        (board[6][3:6],board[7][3:6],board[8][3:6]) = area[0:3],area[3:6],area[6:9]
+
+    elif areanum == 3:
+        (board[0][6:],board[1][6:],board[2][6:]) = area[0:3],area[3:6],area[6:9]
+    elif areanum == 6:
+        (board[3][6:],board[4][6:],board[5][6:]) = area[0:3],area[3:6],area[6:9]
+    elif areanum == 9:
+        (board[6][6:],board[7][6:],board[8][6:]) = area[0:3],area[3:6],area[6:9]
+    else:
+        return "Don't let this happen"
+    return board
 
 #-------------------------------------------------
 
@@ -60,8 +98,10 @@ def find_missing(section):
 def add_notes(section):
     missing = find_missing(section)
     for i in range(len(section)):
-        if section[i] == 0:
+        if section[i] == 0 and len(missing) == 1:
             section[i] = missing[0]
+        elif section[i] == 0:
+            section[i] = missing
         elif type(section[i]) is list:
             sboth = set(missing).intersection(section[i])
             both = []
@@ -87,4 +127,11 @@ def solve(puzzle):
 #printboard(board)
 #print s1
 #print add_notes(get_area(board,5))
-print add_notes([1,2,3,4,5,6,7,8,[5,9]])
+#print add_notes([1,2,3,4,5,6,7,8,[5,9]])
+printboard(board)
+print "#######################"
+print add_notes(get_area(board,5))
+print "#######################"
+printboard(sync_area(board,add_notes(get_area(board,5)),5))
+#printboard(sync_row(board, add_notes(get_row(board,6)), 6))
+#print sync_col(board, add_notes(get_col(board,6)), 6)[0]
