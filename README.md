@@ -13,4 +13,4 @@ The inputs to the solver are hard coded into the program.
 Clone the git repository using <code>git clone https://github.com/glee-/sudoku_solver.git</code>
 After cloning the repository, run the program within a terminal using <code>python solver.py</code>
 
-Within the program, the solver is called through the function <b>solve(board)</b>
+Within the program, the solver is called through the function <code>solve(board)</code>
