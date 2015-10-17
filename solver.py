@@ -61,13 +61,16 @@ def add_notes(section):
     missing = find_missing(section)
     for i in range(len(section)):
         if section[i] == 0:
-            section[i] = missing
+            section[i] = missing[0]
         elif type(section[i]) is list:
             sboth = set(missing).intersection(section[i])
             both = []
             for j in range(len(sboth)):
                 both.append(sboth.pop())
-            section[i] = both
+            if len(both) == 1:
+                section[i] = both[0]
+            else:
+                section[i] = both
     return section
 
 def solve_section(section):
@@ -87,8 +90,11 @@ def solved(section):
             solved = False
     return solved
 
+def solve(puzzle):
+    board = puzzle
+
 #-------------------------------------------------
 #printboard(board)
 #print s1
 #print add_notes(get_area(board,5))
-print add_notes(get_row(board,0))
+print add_notes([1,2,3,4,5,6,7,8,[5,9]])
