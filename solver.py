@@ -73,20 +73,10 @@ def add_notes(section):
                 section[i] = both
     return section
 
-def solve_section(section):
-    #Solves section if only one missing
-    missing = find_missingnos(get_sectionums(section))
-    if len(missing) == 1:
-        for i in range(len(section)):
-            for j in range(len(section[0])):
-                if section[i][j] == "":
-                    section[i][j] = missing[0]
-    return section
-
 def solved(section):
     solved = True
     for element in section:
-        if element == "":
+        if element == 0 or type(element) is list:
             solved = False
     return solved
 
