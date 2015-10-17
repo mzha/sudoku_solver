@@ -192,10 +192,11 @@ def guess(board):
                 guess = board[i][j]
 
     #Use guess to get new board
-                for num in guess:
-                    #print "Guessing", num, "at position", [[i],[j]]
+                for g in range(len(guess)):
+
+                    print "Guessing", guess[g], "at position", str([i,j])+ ". I can guess", str(guess)
                     tempboard = board
-                    tempboard[i][j] = num
+                    tempboard[i][j] = guess[g]
                     solve(tempboard)
 
 def iter(board):
@@ -212,7 +213,7 @@ def iter(board):
 
 def solve(board):
     out = board
-    for i in range(50):
+    for i in range(20):
         out = iter(board)
     if solved(out):
         print "Puzzle Solved"
@@ -220,7 +221,7 @@ def solve(board):
         printboard(out)
         print "##################"
         print "\n"
-        exit()
+
     else:
         #print "Not quite yet"
         guess(board)
