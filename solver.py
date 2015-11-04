@@ -1,4 +1,5 @@
 import pdb;
+import sys;
 import copy;
 a = [
 [0,2,9,4,8,6,0,1,3],
@@ -69,6 +70,17 @@ f = [
 [7,0,0,0,0,0,5,1,0],
 [0,0,0,0,6,0,9,0,8],
 [0,0,3,0,1,0,0,4,0]
+]
+g = [
+[0,0,0,9,1,0,2,0,0],
+[0,4,1,0,0,5,0,0,0],
+[5,0,8,0,0,7,0,0,0],
+[7,0,0,0,0,4,0,9,0],
+[0,0,3,0,0,0,4,0,0],
+[0,6,0,3,0,0,0,0,2],
+[0,0,0,7,0,0,1,0,3],
+[0,0,0,4,0,0,8,6,0],
+[0,0,9,0,8,1,0,0,0]
 ]
 
 # Board will init like this
@@ -180,15 +192,38 @@ def add_notes(section):
 ##Determine if the puzzle has been solved
 def sectionsolved(section):
     solved = True
+    # elements = []
     for element in section:
         if element == 0 or type(element) is list:
             solved = False
+        # elements.append(element)
     return solved
+
+def sectionsolvedb(section):
+    solved = True
+    elements = []
+    for element in section:
+        if element == 0 or type(element) is list or element in elements:
+            solved = False
+        elements.append(element)
+
+    return solved
+
 
 def solved(board):
     complete = True
-    for row in board:
-        complete = complete and sectionsolved(row)
+    for i in range(len(board)):
+        col = get_col(board, i)
+        row = get_row(board, i)
+        complete = complete and sectionsolved(row) and sectionsolved(col)
+    return complete
+
+def solvedb(board):
+    complete = True
+    for i in range(len(board)):
+        col = get_col(board, i)
+        row = get_row(board, i)
+        complete = complete and sectionsolvedb(row) and sectionsolvedb(col)
     return complete
 
 #-------------------------------------------------
@@ -213,7 +248,7 @@ def guess(board):
 
     #Use guess to get new board
     for g in range(len(guess[0])):
-        print "Guessing", guess[0][g], "at position", guess[1], ". I can guess", str(guess[0])
+        # print "Guessing", guess[0][g], "at position", guess[1], ". I can guess", str(guess[0])
         tempboard = copy.deepcopy(origboard)
         # print ('#PRESOLVED BOARD########################')
         # printboard(tempboard)
@@ -221,7 +256,7 @@ def guess(board):
         tempboard = solvestate(tempboard)
         # print ('#SOLVED########################')
         # printboard(tempboard)
-        if origboard == tempboard:
+        if solved(board):
             return
         # print ('#ORIG BOARD########################')
         # print origboard
@@ -229,7 +264,6 @@ def guess(board):
 
 
     return results
-
 
 def iter(board):
     #Solve Rows
@@ -244,21 +278,18 @@ def iter(board):
     return board
 
 def solvestate(board):
-    print "Doing a solve"
     out = copy.deepcopy(board)
     for i in range(20):
         out = iter(out)
 
     #Move this portion to main solving section later
-    if solved(out):
+    if solvedb(out):
         print "Puzzle Solved"
         print "##################"
         printboard(out)
         print "##################"
         print "\n"
-
-    else:
-        print "Not quite yet"
+        sys.exit()
 
     return out
 
@@ -266,18 +297,11 @@ def recurse(boards):
 
     for i in range(len(boards)):
         if solved(boards[i]):
-            print "Here are the boards I found when solved"
-            printboardr(boards)
             return
 
         temp = guess(boards[i])
-        # printboardr(temp)
-        # print "##################"
-        # printboard(temp[i])
 
-        print("Recursing")
         recurse(temp)
-
 
 def printboardr(boards):
     size = len(boards)
@@ -298,8 +322,6 @@ def solve(board):
         recurse(c)
         # guess(b)
 
-
-
 #-------------------------------------------------
 ##Run Code
-solve(f)
+solve(g)
