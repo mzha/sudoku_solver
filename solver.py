@@ -323,5 +323,5 @@ def solve(board):
         # guess(b)
 
 #-------------------------------------------------
-##Run Code
+##Run the code
 solve(g)
