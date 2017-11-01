@@ -1,5 +1,5 @@
 # -- Sudoku Solver --
-A poor attempt at solving sudoku using brute force methods.
+An attempt at solving sudoku using brute force methods.
 The project has been coded using python 2.7.10
 
 Currently, the project is able to solve sudoku puzzles that are of extra hard difficulty or lower. This has been tested by solving several puzzles at www.websudoku.com, on the "Evil" difficulty level.
