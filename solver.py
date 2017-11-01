@@ -1,6 +1,7 @@
 import pdb;
 import sys;
 import copy;
+#Test cases
 a = [
 [0,2,9,4,8,6,0,1,3],
 [1,3,0,7,9,0,4,6,0],
